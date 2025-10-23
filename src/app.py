@@ -85,6 +85,37 @@ def add_user():
     return jsonify({'msg': 'Usuario regiatrado', 'user': new_user.serialize()}), 200
 
 
+@app.route('/user/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    body = request.get_jason(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'msg': f'El usuario con id {user_id} no existe'}), 404
+    user.nick = body.get('name', user.nick)
+    user.email = body.get('email', user.email)
+    user.password = body.get('password', user.password)
+    user.is_active = body.get('is_active', user.is_active)
+    
+
+    db.session.commit()
+    return jsonify({'msg': f'El usuario {user_id} ha sido actualizado con exito', 'user': user.serialize()}), 200
+
+
+@app.routes('/user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'msg': f'El usuario con id {user_id} no existe'}), 404
+    
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'msg': 'El usuario ha sido eliminado con exito'}), 200
+
+
+
+
 @app.route('/characters', methods=['GET'])
 def get_all_characters():
     characters = Characters.query.all()
@@ -117,7 +148,7 @@ def add_character():
     print(body)
 
     new_character = Characters()
-    new_character.name = body['name']
+    new_character.name = body.get('name')
     print(new_character)
     print(type(new_character))
     new_character.height = body.get('height') 
@@ -128,6 +159,34 @@ def add_character():
     db.session.commit()
 
     return jsonify({'msg': 'personaje regiatrado', 'personaje': new_character.serialize()}), 200
+
+
+@app.route('/character/<int:character _id>', methods=['PUT'])
+def update_character(character_id):
+    body = request.get_jason(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    character = Characters.query.get(character_id)
+    if character is None:
+        return jsonify({'msg': f'El personaje con id {character_id} no existe'}), 404
+    character.name = body.get('name', character.name)
+    character.height = body.get('height', character.height)
+    character.weight = body.get('weight', character.weight)
+    character.affiliations = body.get('affiliations', character.affiliations)
+
+    db.session.commit()
+    return jsonify({'msg': f'El personaje {character_id} ha sido actualizado con exito', 'character': character.serialize()}), 200
+
+
+@app.routes('/character/<int:character_id>', methods=['DELETE'])
+def delete_character(character_id):
+    character = Characters.query.get(character_id)
+    if character is None:
+        return jsonify({'msg': f'El personaje con id {character_id} no existe'}), 404
+    
+    db.session.delete(character)
+    db.session.commit()
+    return jsonify({'msg': 'El personaje ha sido eliminado con exito'}), 200
 
 
 
@@ -156,7 +215,6 @@ def get_all_planets():
     return jsonify(response_body), 200
 
 
-
 @app.route('/planet', methods=['POST']) 
 def add_planet():
     body = request.get_json(silent=True)
@@ -182,6 +240,35 @@ def add_planet():
 
     return jsonify({'msg': 'Planeta regiatrado', 'planeta': new_planet.serialize()}), 200
 
+@app.route('/planet/<int:planet_id>', methods=['PUT'])
+def update_planet(planet_id):
+    body = request.get_jason(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    planet = Planet.query.get(planet_id)
+    if planet is None:
+        return jsonify({'msg': f'El planeta con id {planet_id} no existe'}), 404
+    planet.name = body.get('name', planet.name)
+    planet.extension = body.get('extension', planet.extension)
+    planet.population = body.get('population', planet.population)
+    planet.locations = body.get('locations', planet.locations)
+    planet.climate = body.get('climate', planet.climate)
+    planet.species = body.get('species', planet.species)
+    planet.affiliations = body.get('affiliations', planet.affiliations)
+
+    db.session.commit()
+    return jsonify({'msg': f'El planeta {planet_id} ha sido actualizado con exito', 'planet': planet.serialize()}), 200
+
+
+@app.routes('/planet/<int:planet_id>', methods=['DELETE'])
+def delete_planet(planet_id):
+    planet = Planet.query.get(planet_id)
+    if planet is None:
+        return jsonify({'msg': f'El planeta con id {planet_id} no existe'}), 404
+    
+    db.session.delete(planet)
+    db.session.commit()
+    return jsonify({'msg': 'El planeta ha sido eliminado con exito'}), 200
 
 
 
@@ -232,6 +319,37 @@ def add_starship():
     return jsonify({'msg': 'Nave regiatrada', 'starship': new_starship.serialize()}), 200
 
 
+@app.route('/starship/<int:starship_id>', methods=['PUT'])
+def update_starship(starship_id):
+    body = request.get_jason(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    starship = Starship.query.get(starship_id)
+    if starship is None:
+        return jsonify({'msg': f'La nave con id {starship_id} no existe'}), 404
+    starship.name = body.get('name', starship.name)
+    starship.model = body.get('model', starship.model)
+    starship.dimensions = body.get('dimensions', starship.dimensions)
+    starship.velocity = body.get('velocity', starship.velocity)
+    starship.hiperspace = body.get('hiperspace', starship.hiperspace)
+    starship.affiliations = body.get('affiliations', starship.affiliations)
+
+    db.session.commit()
+    return jsonify({'msg': f'La nave {starship_id} ha sido actualizado con exito', 'starship': starship.serialize()}), 200
+
+
+@app.routes('/starship/<int:starship_id>', methods=['DELETE'])
+def delete_starship(starship_id):
+    starship = Starship.query.get(starship_id)
+    if starship is None:
+        return jsonify({'msg': f'La nave con id {starship_id} no existe'}), 404
+    
+    db.session.delete(starship)
+    db.session.commit()
+    return jsonify({'msg': 'La nave ha sido eliminado con exito'}), 200
+
+
+
 
 @app.route('/user_fav_char/<int:user_id>', methods = ['GET']) # GET Favourite Character By user
 def get_fav_char(user_id):
@@ -250,6 +368,45 @@ def get_fav_char(user_id):
                     'favourite characters': favourite_characters_serialized,\
                     'user': user.serialize()}), 200
 
+
+@app.route('/user_fav_char/<int:user_id>/character/<int:character_id>', methods=['POST'])
+def add_fav_char(user_id, character_id):
+       
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'msg': f'El usuario con id {user_id} no existe'}), 404
+   
+    character = Characters.query.get(character_id)
+    if character is None:
+        return jsonify({'msg': f'El character con id {character_id} no existe'}), 404
+
+    existing_fav_char = FavouriteCharacters.query.filter_by(user_id=user_id, character_id=character_id).first() 
+    if existing_fav_char:
+        return jsonify({'msg':'El personaje ya esta en favoritos' }), 400
+    
+    new_fav_char = FavouriteCharacters(user_id = user_id, character_id = character_id)
+    
+    db.session.add(new_fav_char)
+    db.session.commit()
+
+    return jsonify({'msg': 'Nuevo character favorito regiatrado', 
+                    'user': user.serialize(), 
+                    'character': character.serialize()}), 200
+
+
+@app.route('/user_fav_char/<int:user_id>/character/<int:character_id>', methods=['DELETE'])
+def delete_fav_char(user_id, character_id):
+    favourite = FavouriteCharacters.query.filter_by(user_id = user_id, character_id = character_id).first()
+    if favourite is None:
+        return jsonify({'msg': 'Este personaje no pertenece a favoritos'}), 404
+    
+    db.session.delete(favourite)
+    db.session.commit()
+    return jsonify({'msg': 'Personaje eliminado de favoritos'}), 200
+
+
+
+
 @app.route('/user_fav_plan/<int:user_id>', methods=['GET']) # GET Favourite Planet By user
 def get_fav_plan(user_id):
     user = User.query.get(user_id)
@@ -264,6 +421,43 @@ def get_fav_plan(user_id):
     return jsonify({'msg': 'Todo salio bien', \
                     'favourite planets': favourite_planets_serialized, \
                         'user': user.serialize()}), 200
+
+
+@app.route('/user_fav_plan/<int:user_id>/planets/<int:planet_id>', methods=['POST'])
+def add_fav_plan(user_id, planet_id):
+       
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'msg': f'El usuario con id {user_id} no existe'}), 404
+   
+    planet = Planet.query.get(planet_id)
+    if planet is None:
+        return jsonify({'msg': f'El planeta con id {planet_id} no existe'}), 404
+
+    existing_fav_plan = FavouritePlanets.query.filter_by(user_id=user_id, planet_id=planet_id).first() 
+    if existing_fav_plan:
+        return jsonify({'msg':'El planeta ya esta en favoritos' }), 400
+    
+    new_fav_plan = FavouritePlanets(user_id = user_id, planet_id = planet_id)
+    
+    db.session.add(new_fav_plan)
+    db.session.commit()
+
+    return jsonify({'msg': 'Nuevo planeta favorito regiatrado', 
+                    'user': user.serialize(), 
+                    'planet': planet.serialize()}), 200
+
+@app.route('/user_fav_plan/<int:user_id>/planet/<int:planet_id>', methods=['DELETE'])
+def delete_fav_plan(user_id, planet_id):
+    favourite = FavouritePlanets.query.filter_by(user_id = user_id, planet_id = planet_id).first()
+    if favourite is None:
+        return jsonify({'msg': 'Este planeta no pertenece a favoritos'}), 404
+    
+    db.session.delete(favourite)
+    db.session.commit()
+    return jsonify({'msg': 'Planeta eliminado de favoritos'}), 200
+
+
 
 
 @app.route('/user_fav_star/<int:user_id>', methods=['GET']) # GET Favourite Starship By user
@@ -282,10 +476,40 @@ def get_fav_star(user_id):
                         'user': user.serialize()}), 200
 
 
-#@app.route('/characters', methods=['GET'])
-#def get_all_characters():
+@app.route('/user_fav_star/<int:user_id>/starship/<int:starship_id>', methods=['POST'])
+def add_fav_star(user_id, starship_id):
+       
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'msg': f'El usuario con id {user_id} no existe'}), 404
+   
+    starship = Starship.query.get(starship_id)
+    if starship is None:
+        return jsonify({'msg': f'La nave con id {starship_id} no existe'}), 404
+
+    existing_fav_star = FavouriteStarships.query.filter_by(user_id=user_id, starship_id=starship_id).first() 
+    if existing_fav_star:
+        return jsonify({'msg':'Esta nave ya esta en favoritos' }), 400
+    
+    new_fav_star = FavouriteStarships(user_id = user_id, starship_id = starship_id)
+    
+    db.session.add(new_fav_star)
+    db.session.commit()
+
+    return jsonify({'msg': 'Nueva nave favorita regiatrado', 
+                    'user': user.serialize(), 
+                    'starship': starship.serialize()}), 200
 
 
+@app.route('/user_fav_star/<int:user_id>/starship/<int:starship_id>', methods=['DELETE'])
+def delete_fav_star(user_id, starship_id):
+    favourite = FavouriteStarships.query.filter_by(user_id = user_id, starship_id = starship_id).first()
+    if favourite is None:
+        return jsonify({'msg': 'Esta nave no pertenece a favoritos'}), 404
+    
+    db.session.delete(favourite)
+    db.session.commit()
+    return jsonify({'msg': 'Nave eliminada de favoritos'}), 200
 
 
 # this only runs if `$ python src/app.py` is executed
