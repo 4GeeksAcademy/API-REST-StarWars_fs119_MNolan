@@ -87,7 +87,7 @@ def add_user():
 
 @app.route('/user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
-    body = request.get_jason(silent=True)
+    body = request.get_json(silent=True)
     if body is None:
         return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
     user = User.query.get(user_id)
@@ -103,7 +103,7 @@ def update_user(user_id):
     return jsonify({'msg': f'El usuario {user_id} ha sido actualizado con exito', 'user': user.serialize()}), 200
 
 
-@app.routes('/user/<int:user_id>', methods=['DELETE'])
+@app.route('/user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get(user_id)
     if user is None:
@@ -129,7 +129,7 @@ def get_all_characters():
     }
     return jsonify(response_body), 200
 
-@app.route('/characters/<int:character_id>', methods=['GET'])
+@app.route('/character/<int:character_id>', methods=['GET'])
 def get_character(character_id):
    
     character = Characters.query.get(character_id)
@@ -161,9 +161,9 @@ def add_character():
     return jsonify({'msg': 'personaje regiatrado', 'personaje': new_character.serialize()}), 200
 
 
-@app.route('/character/<int:character _id>', methods=['PUT'])
+@app.route('/character/<int:character_id>', methods=['PUT'])
 def update_character(character_id):
-    body = request.get_jason(silent=True)
+    body = request.get_json(silent=True)
     if body is None:
         return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
     character = Characters.query.get(character_id)
@@ -178,7 +178,7 @@ def update_character(character_id):
     return jsonify({'msg': f'El personaje {character_id} ha sido actualizado con exito', 'character': character.serialize()}), 200
 
 
-@app.routes('/character/<int:character_id>', methods=['DELETE'])
+@app.route('/character/<int:character_id>', methods=['DELETE'])
 def delete_character(character_id):
     character = Characters.query.get(character_id)
     if character is None:
@@ -242,7 +242,7 @@ def add_planet():
 
 @app.route('/planet/<int:planet_id>', methods=['PUT'])
 def update_planet(planet_id):
-    body = request.get_jason(silent=True)
+    body = request.get_json(silent=True)
     if body is None:
         return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
     planet = Planet.query.get(planet_id)
@@ -260,7 +260,7 @@ def update_planet(planet_id):
     return jsonify({'msg': f'El planeta {planet_id} ha sido actualizado con exito', 'planet': planet.serialize()}), 200
 
 
-@app.routes('/planet/<int:planet_id>', methods=['DELETE'])
+@app.route('/planet/<int:planet_id>', methods=['DELETE'])
 def delete_planet(planet_id):
     planet = Planet.query.get(planet_id)
     if planet is None:
@@ -321,7 +321,7 @@ def add_starship():
 
 @app.route('/starship/<int:starship_id>', methods=['PUT'])
 def update_starship(starship_id):
-    body = request.get_jason(silent=True)
+    body = request.get_json(silent=True)
     if body is None:
         return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
     starship = Starship.query.get(starship_id)
@@ -338,7 +338,7 @@ def update_starship(starship_id):
     return jsonify({'msg': f'La nave {starship_id} ha sido actualizado con exito', 'starship': starship.serialize()}), 200
 
 
-@app.routes('/starship/<int:starship_id>', methods=['DELETE'])
+@app.route('/starship/<int:starship_id>', methods=['DELETE'])
 def delete_starship(starship_id):
     starship = Starship.query.get(starship_id)
     if starship is None:
